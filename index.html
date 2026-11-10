@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lecture Notes Helper</title>
+<style>
+:root{--bg:#F4F6FA;--surface:#FFFFFF;--text:#14181F;--muted:#4A5361;--line:#C5CCD8;--accent:#3B5BDB;--ink:#FFFFFF;--chip:#EDF1FF;--chipink:#1F3A9E;--okbg:#E6F4EA;--ok:#14532D;--badbg:#FDECEC;--bad:#8A1C1C;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181F;--surface:#1D232D;--text:#F4F6FA;--muted:#B8C0CF;--line:#3A4352;--accent:#6F8CFF;--ink:#0E1320;--chip:#26304A;--chipink:#C9D6FF;--okbg:#16301F;--ok:#9BE3B2;--badbg:#3A1C1C;--bad:#FFB4B4}}
+:root[data-theme="dark"]{--bg:#14181F;--surface:#1D232D;--text:#F4F6FA;--muted:#B8C0CF;--line:#3A4352;--accent:#6F8CFF;--ink:#0E1320;--chip:#26304A;--chipink:#C9D6FF;--okbg:#16301F;--ok:#9BE3B2;--badbg:#3A1C1C;--bad:#FFB4B4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:20px}
+main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;padding:24px;max-width:1400px;margin:0 auto}
+section{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+h2{margin:0;font-size:16px}
+h3{margin:0;font-size:22px}
+label,.lbl{font-size:14px;font-weight:600}
+textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:14px;padding:12px}
+textarea{min-height:230px;resize:vertical}
+select{min-height:44px;padding:0 12px}
+button{font:inherit;font-size:14px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>button{flex:1}
+.seg[aria-pressed="true"]{border:2px solid var(--accent);background:var(--chip);color:var(--chipink);font-weight:600}
+.primary{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:600;font-size:16px;min-height:48px}
+.muted{color:var(--muted);font-size:14px;margin:0}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:999px;background:var(--chip);color:var(--chipink);font-size:14px;font-weight:500}
+dl{margin:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+dt{font-weight:600}dd{margin:0 0 4px;color:var(--muted)}
+.opt{text-align:left;padding:10px 14px;width:100%}
+.opt.right{border:2px solid var(--ok);background:var(--okbg);color:var(--ok);font-weight:600}
+.opt.wrong{border:2px solid var(--bad);background:var(--badbg);color:var(--bad);font-weight:600}
+.fb{padding:12px;border-radius:8px;font-size:14px}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}
+.bar{height:8px;border-radius:4px;background:var(--line)}.bar>div{height:8px;border-radius:4px;background:var(--accent);width:0}
+.q{font-size:18px;font-weight:600;margin:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>Lecture Notes Helper</h1><button id="theme" type="button">Dark / light</button></header>
+<main>
+<section aria-labelledby="h-in">
+<label id="h-in" for="lecture">Your lecture text</label>
+<textarea id="lecture" placeholder="Paste your lecture text here…"></textarea>
+<div class="row"><button id="up" type="button">Upload a .txt file</button></div>
+<input id="file" type="file" accept=".txt,text/plain" hidden>
+<div><span class="lbl">Notes length</span>
+<div class="row" id="lens" style="margin-top:8px">
+<button class="seg" type="button" aria-pressed="false" data-n="3">Short</button>
+<button class="seg" type="button" aria-pressed="true" data-n="5">Medium</button>
+<button class="seg" type="button" aria-pressed="false" data-n="8">Detailed</button></div></div>
+<div><label for="lang">Output language</label>
+<select id="lang"><option>English</option><option>Ukrainian</option><option>Russian</option><option>Lithuanian</option></select></div>
+<button id="go" class="primary" type="button">Generate notes</button>
+<p id="status" class="muted" role="status" aria-live="polite"></p>
+</section>
+<section aria-labelledby="h-notes">
+<h2 id="h-notes">Notes</h2>
+<p id="empty" class="muted">Your notes will appear here after you press “Generate notes”.</p>
+<div id="notes" hidden style="display:flex;flex-direction:column;gap:14px">
+<h3 id="ntitle"></h3><ul id="nbul"></ul>
+<div><span class="lbl">Key terms</span><div id="chips" class="chips" style="margin:8px 0"></div><dl id="defs"></dl></div>
+<div class="row"><button id="copy" type="button">Copy</button><button id="dl" type="button">Download</button></div>
+</div>
+</section>
+<section aria-labelledby="h-quiz">
+<h2 id="h-quiz">Self-check</h2>
+<p id="qempty" class="muted">Five questions will appear after the notes are ready.</p>
+<div id="quiz" hidden style="display:flex;flex-direction:column;gap:14px">
+<span id="qnum" class="muted"></span><p id="qtext" class="q"></p>
+<div id="opts" style="display:flex;flex-direction:column;gap:8px"></div>
+<div id="fb" class="fb" hidden role="status"></div>
+<button id="next" type="button" hidden>Next question</button>
+<div><div class="muted" style="display:flex;justify-content:space-between"><span>Score so far</span><strong id="score" style="color:var(--text)"></strong></div>
+<div class="bar" style="margin-top:8px"><div id="prog"></div></div></div>
+</div>
+</section>
+</main>
+<script>
+var $=function(i){return document.getElementById(i)};
+var data=null,qi=0,score=0,answered=false,n=5;
+function status(t){$("status").textContent=t}
+$("theme").onclick=function(){var r=document.documentElement,d=matchMedia("(prefers-color-scheme: dark)").matches;var cur=r.getAttribute("data-theme")||(d?"dark":"light");r.setAttribute("data-theme",cur==="dark"?"light":"dark")};
+$("lens").onclick=function(e){var b=e.target.closest("button");if(!b)return;n=+b.dataset.n;[].forEach.call($("lens").children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")})};
+$("up").onclick=function(){$("file").click()};
+$("file").onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){$("lecture").value=String(r.result)};r.readAsText(f)};
+$("go").onclick=async function(){
+ var text=$("lecture").value.trim();
+ if(text.length<40){status("Please paste a longer text first.");return}
+ $("go").disabled=true;status("Generating…");
+ try{
+  var r=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:text,language:$("lang").value,bullets:n})});
+  if(r.status===429)throw {code:"rate_limited"};
+  if(!r.ok)throw new Error("http");
+  var o=await r.json();
+  if(!o.title||!Array.isArray(o.bullets)||!Array.isArray(o.terms)||!Array.isArray(o.questions))throw new Error("shape");
+  data=o;renderNotes();startQuiz();status("")}
+ catch(e){status(e&&e.code==="rate_limited"?"Too many requests, please try again in a minute.":"Something went wrong. Please try again.")}
+ finally{$("go").disabled=false}
+};
+function renderNotes(){
+ $("empty").hidden=true;$("notes").hidden=false;
+ $("ntitle").textContent=data.title;
+ var u=$("nbul");u.textContent="";data.bullets.forEach(function(b){var l=document.createElement("li");l.textContent=b;u.appendChild(l)});
+ var c=$("chips"),d=$("defs");c.textContent="";d.textContent="";
+ data.terms.forEach(function(t){var s=document.createElement("span");s.className="chip";s.textContent=t.term;c.appendChild(s);
+  var a=document.createElement("dt");a.textContent=t.term;var b=document.createElement("dd");b.textContent=t.definition;d.appendChild(a);d.appendChild(b)});
+}
+function md(){return "# "+data.title+"\n\n"+data.bullets.map(function(b){return "- "+b}).join("\n")+"\n\n## Key terms\n\n"+data.terms.map(function(t){return "- **"+t.term+"**: "+t.definition}).join("\n")+"\n"}
+$("copy").onclick=async function(){try{await navigator.clipboard.writeText(md());status("Copied.")}catch(e){status("Copying isn’t available here. Try Download instead.")}};
+$("dl").onclick=function(){var b=new Blob([md()],{type:"text/markdown"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="lecture-notes.md";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)};
+function startQuiz(){qi=0;score=0;$("qempty").hidden=true;$("quiz").hidden=false;showQ()}
+function showQ(){
+ answered=false;var q=data.questions[qi],tot=data.questions.length;
+ $("qnum").textContent="Question "+(qi+1)+" of "+tot;$("qtext").textContent=q.q;
+ $("fb").hidden=true;$("next").hidden=true;
+ var o=$("opts");o.textContent="";
+ q.options.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=String.fromCharCode(65+i)+". "+t;b.onclick=function(){pick(i)};o.appendChild(b)});
+ upd();
+}
+function upd(){var tot=data.questions.length;$("score").textContent=score+" of "+tot+" correct";$("prog").style.width=(qi/tot*100)+"%"}
+function pick(i){
+ if(answered)return;answered=true;var q=data.questions[qi],ok=i===q.answer,bs=$("opts").children;
+ bs[q.answer].classList.add("right");if(!ok)bs[i].classList.add("wrong");
+ if(ok)score++;
+ var f=$("fb");f.hidden=false;f.className="fb "+(ok?"ok":"bad");f.textContent=(ok?"Correct. ":"Not quite. ")+(q.explanation||"");
+ var last=qi===data.questions.length-1;$("next").hidden=false;$("next").textContent=last?"Try again":"Next question";
+ $("score").textContent=score+" of "+data.questions.length+" correct";$("prog").style.width=((qi+1)/data.questions.length*100)+"%";
+}
+$("next").onclick=function(){if(qi===data.questions.length-1){startQuiz()}else{qi++;showQ()}};
+</script>
+</body>
+</html>
