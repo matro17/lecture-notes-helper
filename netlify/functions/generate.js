@@ -23,6 +23,26 @@ function valid(o) {
 }
 
 exports.handler = async (event) => {
+  // Temporary diagnostics: open the function address in a browser (GET) to see
+  // whether the AI service accepts the key and the model name. Remove when done.
+  if (event.httpMethod === "GET") {
+    const k = process.env.GEMINI_API_KEY;
+    if (!k) return reply(200, { configured: false });
+    try {
+      const t = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": k },
+          body: JSON.stringify({ contents: [{ parts: [{ text: "Reply with the word OK." }] }] }),
+        }
+      );
+      const txt = await t.text();
+      return reply(200, { model: MODEL, upstreamStatus: t.status, detail: txt.slice(0, 400) });
+    } catch (e) {
+      return reply(200, { model: MODEL, networkError: String(e).slice(0, 200) });
+    }
+  }
   if (event.httpMethod !== "POST") return reply(405, { error: "POST only" });
 
   const key = process.env.GEMINI_API_KEY;
@@ -65,7 +85,10 @@ exports.handler = async (event) => {
   }
 
   if (r.status === 429) return reply(429, { error: "Rate limit" });
-  if (!r.ok) return reply(502, { error: "AI service error" });
+  if (!r.ok) {
+    console.error("Gemini error", r.status, (await r.text()).slice(0, 500));
+    return reply(502, { error: "AI service error" });
+  }
 
   try {
     const j = await r.json();
@@ -74,7 +97,8 @@ exports.handler = async (event) => {
     const out = JSON.parse(clean.slice(clean.indexOf("{"), clean.lastIndexOf("}") + 1));
     if (!valid(out)) throw new Error("shape");
     return reply(200, out);
-  } catch {
+  } catch (e) {
+    console.error("Bad AI response", String(e).slice(0, 300));
     return reply(502, { error: "Unexpected AI response" });
   }
 };
