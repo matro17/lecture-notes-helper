@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lecture Notes Helper</title>
     <style>
-        root {
+        :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-color: #1e293b;
@@ -67,6 +67,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
+            min-height: 450px;
         }
 
         h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
@@ -93,6 +94,7 @@
             display: flex;
             gap: 8px;
             margin-top: 5px;
+            margin-bottom: 5px;
         }
 
         .opt-btn {
@@ -103,6 +105,7 @@
             padding: 8px;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: 500;
         }
 
         .opt-btn.active {
@@ -269,7 +272,3 @@
                 <div id="optionsContainer"></div>
                 <button class="next-btn" id="nextBtn">Next question</button>
                 <div class="score-board">
-                    Score so far: <span id="scoreText">0</span> / <span id="totalQuestions">5</span>
-                </div>
-            </div>
-        </div>
