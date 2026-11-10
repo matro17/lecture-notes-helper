@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,10 +200,10 @@
     </div>
 
     <div class="container">
-        <!-- Левая колонка: Ввод -->
+        <!-- Left Column: Input -->
         <div class="card">
             <label>Your lecture text</label>
-            <textarea id="lectureInput" placeholder="Paste your lecture text here... (Например: Лекция об искусственном интеллекте и нейросетях)"></textarea>
+            <textarea id="lectureInput" placeholder="Paste your lecture text here... (e.g., Lecture on Artificial Intelligence and Neural Networks)"></textarea>
             
             <div class="options-group">
                 <label>Upload a .txt file</label>
@@ -222,8 +222,8 @@
             <div class="options-group">
                 <label>Output language</label>
                 <select id="langSelect">
-                    <option value="ru">Russian</option>
                     <option value="en">English</option>
+                    <option value="ru">Russian</option>
                     <option value="ua">Ukrainian</option>
                     <option value="lt">Lithuanian</option>
                 </select>
@@ -232,32 +232,32 @@
             <button class="generate-btn" id="generateBtn">Generate notes</button>
         </div>
 
-        <!-- Средняя колонка: Конспект -->
+        <!-- Middle Column: Notes -->
         <div class="card">
             <h2>Notes</h2>
             <div id="notesPlaceholder" style="color: #64748b; font-style: italic;">
                 Your notes will appear here after you press “Generate notes”.
             </div>
             <div id="notesContent" class="hidden">
-                <h3 style="margin-top: 0; color: var(--primary-color);">Искусственный интеллект и Нейросети</h3>
-                <p><strong>Искусственный интеллект (ИИ)</strong> — область компьютерных наук, занимающаяся созданием систем, способных выполнять творческие задачи, традиционно считающиеся прерогативой человека.</p>
-                <p><strong>Основные тезисы лекции:</strong></p>
+                <h3 style="margin-top: 0; color: var(--primary-color);">Artificial Intelligence and Neural Networks</h3>
+                <p><strong>Artificial Intelligence (AI)</strong> is a field of computer science dedicated to creating systems capable of performing creative tasks that traditionally require human intelligence.</p>
+                <p><strong>Key Lecture Points:</strong></p>
                 <ul>
-                    <li><strong>Машинное обучение (ML):</strong> Метод ИИ, где система учится на массивах данных, выявляя скрытые закономерности.</li>
-                    <li><strong>Нейронные сети:</strong> Математические модели, имитирующие структуру биологических нейронов головного мозга человека.</li>
-                    <li><strong>Глубокое обучение (Deep Learning):</strong> Использование многослойных нейросетей для распознавания сложных образов и генерации текстов.</li>
+                    <li><strong>Machine Learning (ML):</strong> An AI method where a system learns from data datasets to identify hidden patterns.</li>
+                    <li><strong>Neural Networks:</strong> Mathematical models that mimic the structure of biological neurons in the human brain.</li>
+                    <li><strong>Deep Learning (DL):</strong> The use of multi-layered neural networks for complex pattern recognition and text generation.</li>
                 </ul>
                 <h4 style="margin-bottom: 5px;">Key terms:</h4>
-                <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0;">Фронтенд, Алгоритм, Обучающая выборка, Веса связей.</p>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0;">Frontend, Algorithm, Training Dataset, Connection Weights.</p>
                 
                 <div class="action-btns">
-                    <button class="action-btn" onclick="alert('Конспект скопирован в буфер обмена!')">Copy</button>
-                    <button class="action-btn" onclick="alert('Скачивание файла конспекта (lecture_notes.md) началось!')">Download</button>
+                    <button class="action-btn" onclick="alert('Notes copied to clipboard!')">Copy</button>
+                    <button class="action-btn" onclick="alert('Downloading lecture_notes.md file has started!')">Download</button>
                 </div>
             </div>
         </div>
 
-        <!-- Правая колонка: Самопроверка -->
+        <!-- Right Column: Self-check -->
         <div class="card">
             <h2>Self-check</h2>
             <div id="quizPlaceholder" style="color: #64748b; font-style: italic;">
@@ -271,3 +271,5 @@
                 <div class="score-board">
                     Score so far: <span id="scoreText">0</span> / <span id="totalQuestions">5</span>
                 </div>
+            </div>
+        </div>
